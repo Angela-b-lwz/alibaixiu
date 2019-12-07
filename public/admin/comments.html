@@ -25,12 +25,8 @@
         <h1>所有评论</h1>
       </div>
       <div class="page-action">
-        <ul class="pagination pagination-sm pull-right">
-          <li><a href="#">上一页</a></li>
-          <li><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">下一页</a></li>
+        <ul class="pagination pagination-sm pull-right" id="pagination">
+          
         </ul>
       </div>
       <table class="table table-striped table-bordered table-hover">
@@ -44,40 +40,8 @@
             <th class="text-center" width="100">操作</th>
           </tr>
         </thead>
-        <tbody>
-          <tr class="danger">
-            <td>大大</td>
-            <td>楼主好人，顶一个</td>
-            <td>《Hello world》</td>
-            <td>2026/10/07</td>
-            <td>未批准</td>
-            <td class="text-center">
-              <a href="post-add.html" class="btn btn-info btn-xs">批准</a>
-              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr>
-            <td>大大</td>
-            <td>楼主好人，顶一个</td>
-            <td>《Hello world》</td>
-            <td>2026/10/07</td>
-            <td>已批准</td>
-            <td class="text-center">
-              <a href="post-add.html" class="btn btn-warning btn-xs">驳回</a>
-              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
-          <tr>
-            <td>大大</td>
-            <td>楼主好人，顶一个</td>
-            <td>《Hello world》</td>
-            <td>2026/10/07</td>
-            <td>已批准</td>
-            <td class="text-center">
-              <a href="post-add.html" class="btn btn-warning btn-xs">驳回</a>
-              <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
-            </td>
-          </tr>
+        <tbody id="commentsBox">        
+       
         </tbody>
       </table>
     </div>
@@ -122,6 +86,108 @@
 
   <script src="../assets/vendors/jquery/jquery.js"></script>
   <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
+  <script src="../assets/vendors/art-template/template-web.js"></script>
+  <script type="text/html" id="tpl-comments">  
+  {{each records}}
+  <tr class="{{$value.state==0?'danger':''}}">
+            <td>{{$value.author.nickName}}</td>
+            <td>{{$value.content}}</td>
+            <td>{{$value.post.title}}</td>
+            <td>{{$value.createAt.split('T')[0]}}</td>
+            <td>{{$value.state==0?'未审核':'已批准'}}</td>
+            <td class="text-center">
+              <a href="javascript:;" class="btn btn-info btn-xs edit" data-id="{{$value._id}}" data-state="{{$value.state}}">{{$value.state==0?'批准':'驳回'}}</a>
+              <a href="javascript:;" class="btn btn-danger btn-xs del" data-id="{{$value._id}}">删除</a>
+            </td>
+          </tr>
+  {{/each}}  
+  </script>
+  <script type="text/html" id="tpl-pagination">
+  
+    {{if page > 1}}
+    <li><a href="javascript:;" onclick="changePage({{page-1}})">上一页</a></li>
+    {{/if}}
+    {{each display}}
+    <li class="{{$value==page?'active':''}}"><a href="javascript:;" onclick="changePage({{$value}})">{{$value}}</a></li>
+    {{/each}}
+    {{if page < pages}}
+    <li><a href="javascript:;" onclick="changePage({{page+1}})">下一页</a></li>
+    {{/if}}
+  </script>
   <script>NProgress.done()</script>
+  <script>
+    //创建评论
+    // $.ajax({
+    //   url:'/comments',
+    //   type:'post',
+    //   data:{
+    //     author:'5de8f4d924c5f217c824ee9d',
+    //     content:'第一条评论',
+    //     post:'5deb07b2d595bc19ac13d8fc'
+    //   },
+    //   success:function(data){
+    //       console.log(data);
+    //   }
+    // })
+
+    //获取评论列表
+    $.ajax({
+      url:'/comments',
+      type:'get',
+      success:function(data){
+        console.log(data);
+        var html=template('tpl-comments',data);
+        $('#commentsBox').html(html); 
+        var page = template('tpl-pagination',data);
+        $('#pagination').html(page);       
+      }
+    });
+
+  //删除评论
+  $('#commentsBox').on('click','.del',function(){
+    var id = $(this).attr('data-id');
+   $.ajax({
+     type:'delete',
+     url:'/comments/'+id,
+     success:function(data){
+        location.reload();
+     }
+   });    
+  });
+
+  $('#commentsBox').on('click','.edit',function(){
+    var id = $(this).attr('data-id');
+    var status = $(this).attr('data-state');
+    $.ajax({
+		type: 'put',
+		url: '/comments/' + id,
+		data: {
+			state: status == 0 ? 1 : 0
+		},
+		success: function () {
+			location.reload();
+		}
+	})
+  });
+
+  // 实现分页
+function changePage (page) {
+	$.ajax({
+		type: 'get',
+		url: '/comments',
+		data: {
+			page: page
+		},
+		success: function (data) {
+			console.log(data)
+		  var html=template('tpl-comments',data);
+        $('#commentsBox').html(html); 
+        var page = template('tpl-pagination',data);
+        $('#pagination').html(page);   
+		}
+	})
+}
+
+  </script>
 </body>
 </html>
