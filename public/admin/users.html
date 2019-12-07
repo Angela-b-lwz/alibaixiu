@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>Users &laquo; Admin</title>
+    <link
+      rel="stylesheet"
+      href="../assets/vendors/bootstrap/css/bootstrap.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../assets/vendors/font-awesome/css/font-awesome.css"
+    />
+    <link rel="stylesheet" href="../assets/vendors/nprogress/nprogress.css" />
+    <link rel="stylesheet" href="../assets/css/admin.css" />
+    <script src="../assets/vendors/nprogress/nprogress.js"></script>
+  </head>
+  <body>
+    <script>
+      NProgress.start();
+    </script>
+
+    <div class="main">
+      <nav class="navbar">
+        <button class="btn btn-default navbar-btn fa fa-bars"></button>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="profile.html"><i class="fa fa-user"></i>个人中心</a>
+          </li>
+          <li>
+            <a href="login.html"><i class="fa fa-sign-out"></i>退出</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="container-fluid">
+        <div class="page-title">
+          <h1>用户</h1>
+        </div>
+        <!-- 有错误信息时展示 -->
+        <!-- <div class="alert alert-danger">
+        <strong>错误！</strong>发生XXX错误
+      </div> -->
+        <div class="row">
+          <div class="col-md-4" id="modifyBox">
+            <form id="usersForm">
+              <h2>添加新用户</h2>
+              <div class="form-group">
+                <label>头像</label>
+                <div class="form-group">
+                  <label class="form-image">
+                    <input id="avatar" type="file" />
+                    <img src="../assets/img/default.png" id="preview" />
+                    <i class="mask fa fa-upload"></i>
+                  </label>
+                  <input type="hidden" name="avatar" id="hiddenInput" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>邮箱</label>
+                <input
+                  class="form-control"
+                  name="email"
+                  type="email"
+                  placeholder="请输入邮箱"
+                />
+              </div>
+              <div class="form-group">
+                <label>昵称</label>
+                <input
+                  class="form-control"
+                  name="nickName"
+                  type="text"
+                  placeholder="请输入昵称"
+                />
+              </div>
+              <div class="form-group">
+                <label>密码</label>
+                <input
+                  class="form-control"
+                  name="password"
+                  type="text"
+                  placeholder="请输入密码"
+                />
+              </div>
+              <div class="form-group">
+                <div class="radio-inline">
+                  <label
+                    ><input type="radio" name="status" value="0" />未激活</label
+                  >
+                </div>
+                <div class="radio-inline">
+                  <label
+                    ><input type="radio" name="status" value="1" />激活</label
+                  >
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="radio-inline">
+                  <label
+                    ><input
+                      type="radio"
+                      name="role"
+                      value="admin"
+                    />超级管理员</label
+                  >
+                </div>
+                <div class="radio-inline">
+                  <label
+                    ><input
+                      type="radio"
+                      name="role"
+                      value="normal"
+                    />普通用户</label
+                  >
+                </div>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-primary" type="submit">添加</button>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-8">
+            <div class="page-action" >
+              <!-- show when multiple checked -->
+              <a
+                class="btn btn-danger btn-sm"
+                href="javascript:;"
+                style="display: none"
+                id="delMany" 
+                >批量删除</a
+              >
+            </div>
+            <table class="table table-striped table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th class="text-center" width="40">
+                    <input type="checkbox" id="checkAll" />
+                  </th>
+                  <th class="text-center" width="80">头像</th>
+                  <th>邮箱</th>
+                  <th>昵称</th>
+                  <th>状态</th>
+                  <th>角色</th>
+                  <th class="text-center" width="100">操作</th>
+                </tr>
+              </thead>
+              <tbody id="userBox"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="aside">
+      <div class="profile">
+        <img class="avatar" src="../uploads/avatar.jpg" />
+        <h3 class="name">Coder</h3>
+      </div>
+      <ul class="nav">
+        <li>
+          <a href="index.html"><i class="fa fa-dashboard"></i>仪表盘</a>
+        </li>
+        <li>
+          <a href="#menu-posts" class="collapsed" data-toggle="collapse">
+            <i class="fa fa-thumb-tack"></i>文章<i
+              class="fa fa-angle-right"
+            ></i>
+          </a>
+          <ul id="menu-posts" class="collapse">
+            <li><a href="posts.html">所有文章</a></li>
+            <li><a href="post-add.html">写文章</a></li>
+            <li><a href="categories.html">分类目录</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="comments.html"><i class="fa fa-comments"></i>评论</a>
+        </li>
+        <li class="active">
+          <a href="users.html"><i class="fa fa-users"></i>用户</a>
+        </li>
+        <li>
+          <a href="#menu-settings" class="collapsed" data-toggle="collapse">
+            <i class="fa fa-cogs"></i>设置<i class="fa fa-angle-right"></i>
+          </a>
+          <ul id="menu-settings" class="collapse">
+            <li><a href="slides.html">图片轮播</a></li>
+            <li><a href="settings.html">网站设置</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <script src="../assets/vendors/jquery/jquery.js"></script>
+    <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
+    <script src="../assets/vendors/art-template/template-web.js"></script>
+    <script type="text/html" id="userTpl">
+      {{each  data}}
+      <tr>
+          <td class="text-center"><input type="checkbox" data-id="{{$value._id}}" id="checkbox"  /></td>
+          <td class="text-center">
+            <img class="avatar" src="{{$value.avatar}}" />
+          </td>
+          <td>{{$value.email}}</td>
+          <td>{{$value.nickName}}</td>
+          <td>{{$value.status=='0'?"未激活":"激活"}}</td>
+          <td>{{$value.role=="admin"?"超级管理员":"普通用户"}}</td>
+          <td class="text-center">
+            <a href="javascript:;" class="btn btn-default btn-xs edit" data-id="{{$value._id}}" 
+              >编辑</a
+            >
+            <a href="javascript:;" class="btn btn-danger btn-xs del" data-id="{{$value._id}}"
+              >删除</a
+            >
+          </td>
+        </tr>
+      {{/each}}
+    </script>
+
+    <script type="text/html" id="tpl-modify">
+
+      <form id="modifyForm" data-id="{{_id}}" >
+                <h2>修改用户</h2>
+                <div class="form-group">
+                  <label>头像</label>
+                  <div class="form-group">
+                    <label class="form-image">
+                      <input id="avatar" type="file" />
+                      {{if avatar}}
+                      <img src="{{avatar}}" id="preview" />
+                      {{else}}
+
+                      <img src="../assets/img/default.png" id="preview" />
+                      {{/if}}
+                      <i class="mask fa fa-upload"></i>
+                    </label>
+                    <input type="hidden" name="avatar" id="hiddenInput" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>邮箱</label>
+                  <input
+                    class="form-control"
+                    name="email"
+                    type="email"
+                    placeholder="请输入邮箱"
+                    value ="{{email}}"
+                    disabled
+                  />
+                </div>
+                <div class="form-group">
+                  <label>昵称</label>
+                  <input
+                    class="form-control"
+                    name="nickName"
+                    type="text"
+                    placeholder="请输入昵称"
+                    value ="{{nickName}}"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <div class="radio-inline">
+                    <label
+                      ><input type="radio" name="status" value="0" {{status=='0'?'checked':''}} />未激活</label
+                    >
+                  </div>
+                  <div class="radio-inline">
+                    <label
+                      ><input type="radio" name="status" value="1" {{status=='1'?'checked':''}}/>激活</label
+                    >
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="radio-inline">
+                    <label
+                      ><input
+                        type="radio"
+                        name="role"
+                        value="admin"
+                        {{role=='admin'?'checked':''}}
+                      />超级管理员</label
+                    >
+                  </div>
+                  <div class="radio-inline">
+                    <label
+                      ><input
+                        type="radio"
+                        name="role"
+                        value="normal"
+                        {{role=='normal'?'checked':''}}
+                      />普通用户</label
+                    >
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" type="submit" >修改</button>
+                </div>
+              </form>
+    </script>
+
+    <script>
+      NProgress.done();
+    </script>
+    <script>
+      //添加新用户
+      $("#usersForm").on("submit", function() {
+        var formdata = $(this).serialize();
+        console.log(formdata);
+        $.ajax({
+          type: "post",
+          url: "/users",
+          data: formdata,
+          success: function(data) {
+            location.reload();
+          },
+          error: function() {
+            alert("添加失败");
+          }
+        });
+        return false;
+      });
+      //上传图像
+      $("#modifyBox").on("change", "#avatar", function() {
+        console.log(this.files);
+        var formData = new FormData();
+        formData.append("avatar", this.files[0]);
+        $.ajax({
+          type: "post",
+          url: "/upload",
+          data: formData,
+          // 告诉$.ajax方法不要解析请求参数
+          processData: false,
+          // 告诉$.ajax方法不要设置请求参数的类型
+          contentType: false,
+          success: function(response) {
+            console.log(response);
+            // 实现头像预览功能
+            $("#preview").attr("src", response[0].avatar);
+            $("#hiddenInput").val(response[0].avatar);
+          }
+        });
+      });
+      //渲染页面
+      $.ajax({
+        type: "get",
+        url: "/users",
+        success: function(response) {
+          // console.log(response);
+          // 使用模板引擎将数据和HTML字符串进行拼接
+          var html = template("userTpl", { data: response });
+          // 将拼接好的字符串显示在页面中
+          $("#userBox").html(html);
+        }
+      });
+      //点击编辑按钮,呈现要修改的用户信息
+      $("#userBox").on("click", ".edit", function() {
+        var id = $(this).data("id");
+        $.ajax({
+          type: "get",
+          url: "/users/" + id,
+          success: function(data) {
+            // console.log(data);
+            var html = template("tpl-modify", data);
+            $("#modifyBox").html(html);
+          }
+        });
+      });
+      //点击修改按钮,修改用户信息
+      $("#modifyBox").on("submit", "#modifyForm", function() {
+        // 获取用户在表单中输入的内容
+        var formData = $(this).serialize();
+        console.log(formData);
+        // 获取要修改的那个用户的id值
+        var id = $(this).attr("data-id");
+        // console.log(id);
+        // 发送请求 修改用户信息
+        $.ajax({
+          type: "put",
+          url: "/users/" + id,
+          data: formData,
+          success: function(response) {
+            // 修改用户信息成功 重新加载页面
+            location.reload();
+          }
+        });
+        // 阻止表单默认提交
+        return false;
+      });
+
+      //todo 点击删除按钮删除用户
+      $("#userBox").on("click", ".del", function() {
+        var id = $(this).attr("data-id");
+        // console.log(id);
+        if (confirm("您确定要删除么?")) {
+          $.ajax({
+            type: "delete",
+            url: "/users/" + id,
+            success: function(data) {
+              console.log(data);
+              location.reload();
+            }
+          });
+        }
+      });
+
+      //todo 全选反选以及出现批量删除
+      var checkAll = $("#checkAll");
+      //全选控制下面的复选框
+      checkAll.on("change", function() {
+        var inputs = $("#userBox").find("input");
+        // console.log(inputs);
+        var isChecked = $(this).prop("checked");
+        $(inputs).prop("checked", isChecked);
+       if(isChecked){
+         $('#delMany').show();
+       }else{
+        $('#delMany').hide();
+       }
+      });
+//复选框控制全选框
+      $("#userBox").on("change", "#checkbox", function() {
+        //复选框的数量
+        // console.log($('#userBox').find('input').length);
+        //已经选中的复选框的数量
+        // console.log($('#userBox').find('input').filter(':checked').length);
+        if (
+          $("#userBox").find("input").length ==
+          $("#userBox")
+            .find("input")
+            .filter(":checked").length
+        ) {
+          checkAll.prop("checked", "checked");
+        } else {
+          checkAll.prop("checked", "");
+        }
+        if($('#userBox').find('input').filter(':checked').length>0){
+          $('#delMany').show();
+        }else{
+          $('#delMany').hide();
+        }
+
+      });
+
+
+      //点击批量删除按钮,批量删除
+      $('#delMany').on('click',function(){ 
+        var checkedL= $('#userBox').find('input').filter(':checked') 
+        // console.log(checkedL);              
+       
+        var ids=[];
+           ids.push(checkedL.toArray().map(function(ele){
+          return $(ele).attr('data-id')
+        }))
+        // console.log(ids[0]);
+        // console.log(ids[0].join("-"))      
+   
+        $.ajax({
+          url:'/users/'+ ids[0].join('-'),
+          type:'DELETE',
+          success:function(data){
+              // console.log(data);
+              location.reload();              
+          }
+        })       
+      });
+    </script>
+  </body>
+</html>
