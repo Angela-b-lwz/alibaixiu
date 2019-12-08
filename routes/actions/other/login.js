@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
 	// 密码错误 响应
 	if (!validPassword) return res.status(400).send({message: '邮箱地址或者密码错误'});
 	// 将用户信息存储在session中
-	req.session.userInfo = user;
+	req.session.userInfo = user;	
 	// 响应
 	res.send(_.pick(user, ['nickName', 'email', 'role', 'avatar', '_id', 'status', 'createTime']));
 };

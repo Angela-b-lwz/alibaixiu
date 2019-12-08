@@ -1,8 +1,9 @@
 module.exports = async (req, res) => {
 	if (req.session && req.session.userInfo) {
 		var id = req.session.userInfo._id;
-		res.send(`var isLogin = true,userId="${id}"`)
+		var role = req.session.userInfo.role;
+		res.send(`var isLogin = true,userId="${id}",userRole="${role}"`)
 	} else {
-		res.send('var isLogin = false,userId =" ')
+		res.send('var isLogin = false,userId ="" ')
 	}
 };

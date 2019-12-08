@@ -15,9 +15,13 @@ $('#loginBtn').on('click',function(){
       data:{
         email,password
       },
-      success:function(data){
-          // console.log(data);
-          location.href ='/admin/index.html'
+      success:function(data){       
+          
+          if(data.role=='admin'){
+           location.href ='/admin/index.html'
+          }else {
+            location.href ='/index.html'
+          }
           
       },
       error :function(){
