@@ -1,3 +1,9 @@
+<script src="/login/status"></script>
+<script>
+  if (!isLogin) {
+    location.href = "/admin/login.html";
+  }
+</script>
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
@@ -91,8 +97,8 @@
 
     <div class="aside">
       <div class="profile">
-        <img class="avatar" src="../uploads/avatar.jpg" />
-        <h3 class="name">Coder</h3>
+        <img class="avatar" src="" />
+        <h3 class="name"></h3>
       </div>
       <ul class="nav">
         <li>
@@ -129,66 +135,22 @@
     </div>
     <script src="../assets/vendors/jquery/jquery.js"></script>
     <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
+    <script src="../assets/js/common.js"></script>
     <script type="text/html" id="tpl-category">
-      {{each categories}}
-      <tr>
-        <td class="text-center"><input type="checkbox"></td>
-           <td> <i class="{{$value.className}}"></i>{{$value.title}}</td>
-          <td class="text-center">
-            <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
-            <a href="javascript:;" class="btn btn-danger btn-xs del" data-id="{{$value._id}}">删除</a>
-         </td>
-     </tr>
-      {{/each}}
+       {{each categories}}
+       <tr>
+         <td class="text-center"><input type="checkbox"></td>
+            <td> <i class="{{$value.className}}"></i>{{$value.title}}</td>
+           <td class="text-center">
+             <a href="javascript:;" class="btn btn-info btn-xs">编辑</a>
+             <a href="javascript:;" class="btn btn-danger btn-xs del" data-id="{{$value._id}}">删除</a>
+          </td>
+      </tr>
+       {{/each}}
     </script>
+    <script src="../assets/js/categories.js"></script>
     <script>
       NProgress.done();
-    </script>
-    <script>
-      $("#categoryForm").on("submit", function(e) {
-        e.preventDefault();
-        var formdata = $(this).serialize();
-        // console.log(formdata);
-        $.ajax({
-          type: "post",
-          url: "/categories",
-          data: formdata,
-          success: function(data) {
-            // console.log(data);
-            location.reload();
-          },
-          error: function(err) {
-            console.log(err.responseText);
-          }
-        });
-      });
-
-      $.ajax({
-        type:'get',
-        url:'/categories',
-        success:function(data){
-          console.log(data);
-          
-            var html = template('tpl-category',{categories:data})
-            $('#category-data').html(html);
-        }
-      });
-
-
-      //todo 编辑
-
-      //todo 删除
-      $('#category-data').on('click','.del',function(){
-        var id=$(this).attr('data-id');
-        console.log(id);
-        $.ajax({
-          type:'DELETE',
-          url:'/categories/'+id,
-          success:function(){
-            location.reload();
-          }
-        });        
-      })
     </script>
   </body>
 </html>

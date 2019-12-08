@@ -1,3 +1,9 @@
+<script src="/login/status"></script>
+<script>
+  if (!isLogin) {
+    location.href = "/admin/login.html";
+  }
+</script>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -49,8 +55,8 @@
 
   <div class="aside">
     <div class="profile">
-      <img class="avatar" src="../uploads/avatar.jpg">
-      <h3 class="name">Coder</h3>
+      <img class="avatar" src="">
+      <h3 class="name"></h3>
     </div>
     <ul class="nav">
       <li>
@@ -86,6 +92,7 @@
 
   <script src="../assets/vendors/jquery/jquery.js"></script>
   <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
+  <script src="../assets/js/common.js"></script>
   <script src="../assets/vendors/art-template/template-web.js"></script>
   <script type="text/html" id="tpl-comments">  
   {{each records}}
@@ -114,80 +121,7 @@
     <li><a href="javascript:;" onclick="changePage({{page+1}})">下一页</a></li>
     {{/if}}
   </script>
+  <script src="../assets/js/comments.js">  </script>
   <script>NProgress.done()</script>
-  <script>
-    //创建评论
-    // $.ajax({
-    //   url:'/comments',
-    //   type:'post',
-    //   data:{
-    //     author:'5de8f4d924c5f217c824ee9d',
-    //     content:'第一条评论',
-    //     post:'5deb07b2d595bc19ac13d8fc'
-    //   },
-    //   success:function(data){
-    //       console.log(data);
-    //   }
-    // })
-
-    //获取评论列表
-    $.ajax({
-      url:'/comments',
-      type:'get',
-      success:function(data){
-        console.log(data);
-        var html=template('tpl-comments',data);
-        $('#commentsBox').html(html); 
-        var page = template('tpl-pagination',data);
-        $('#pagination').html(page);       
-      }
-    });
-
-  //删除评论
-  $('#commentsBox').on('click','.del',function(){
-    var id = $(this).attr('data-id');
-   $.ajax({
-     type:'delete',
-     url:'/comments/'+id,
-     success:function(data){
-        location.reload();
-     }
-   });    
-  });
-
-  $('#commentsBox').on('click','.edit',function(){
-    var id = $(this).attr('data-id');
-    var status = $(this).attr('data-state');
-    $.ajax({
-		type: 'put',
-		url: '/comments/' + id,
-		data: {
-			state: status == 0 ? 1 : 0
-		},
-		success: function () {
-			location.reload();
-		}
-	})
-  });
-
-  // 实现分页
-function changePage (page) {
-	$.ajax({
-		type: 'get',
-		url: '/comments',
-		data: {
-			page: page
-		},
-		success: function (data) {
-			console.log(data)
-		  var html=template('tpl-comments',data);
-        $('#commentsBox').html(html); 
-        var page = template('tpl-pagination',data);
-        $('#pagination').html(page);   
-		}
-	})
-}
-
-  </script>
 </body>
 </html>
